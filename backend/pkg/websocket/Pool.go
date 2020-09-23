@@ -25,7 +25,6 @@ func (pool *Pool) Start() {
 			pool.Clients[client] = true
 			fmt.Println("Size of Connection Pool: ", len(pool.Clients))
 			for client, _ := range pool.Clients {
-				fmt.Println(client)
 				client.Conn.WriteJSON(Message{Type: 2, Body: "New User Joined..."})
 			}
 			break

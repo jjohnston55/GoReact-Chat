@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
+import Message from './message'
 
 const History = (props) => {
     const messages = props.chatHistory.map((msg, idx) => (
-        <p key={idx}>{msg.data}</p>
+        <Message key={idx} message={msg.data} />
     ))
 
     return (
