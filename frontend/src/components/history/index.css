@@ -10,9 +10,21 @@ img#avatar {
     padding: 5px;
 }
 
-.chat > div, .chat > img {
+.chatText, .chat > img {
     display: inline;
     vertical-align: middle;
+}
+
+.chatText {
+    min-width: 5%;
+    max-width: 45%;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.user {
+    font-size: small;
+    padding: 0px 10px;
 }
 
 .messages {
@@ -39,13 +51,10 @@ img#avatar {
 
 .message {
     width: fit-content;
-    min-width: 3%;
-    max-width: 45%;
     background: white;
     border-radius: 10px;
     padding: 5px 15px;
     box-shadow: 1px 1px 5px grey;
-    margin: 15px;
 }
 
 .userStatus {

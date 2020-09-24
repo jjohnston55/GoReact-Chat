@@ -2,7 +2,10 @@ import React, { useState } from 'react'
 
 const Message = (props) => {
     const message = JSON.parse(props.message)
-    const [imgSrc, ] = useState('/img/profile_' + Math.floor(Math.random() * 24) + '.jpg')
+    
+    const hashCode = s => Math.abs(s.split('').reduce((a,b) => (((a << 5) - a) + b.charCodeAt(0))|0, 0)) % 25
+
+    const [imgSrc, ] = useState('/img/profile_' + hashCode(message.user) + '.jpg')
 
     switch (message.type) {
         case 2: // User Joined
@@ -15,7 +18,10 @@ const Message = (props) => {
             return (
                 <div className='chat'>
                     <img id='avatar' alt='avatar' src={imgSrc} />
-                    <div className='message'>{message.body}</div>
+                    <div className='chatText'>
+                        <div className='message'>{message.body}</div>
+                        <div className='user'>{message.user}</div>
+                    </div>
                 </div>
             )
     }
