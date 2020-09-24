@@ -7,7 +7,7 @@ import (
 	"./pkg/websocket"
 )
 
-func servWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
+func servWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request, user string) {
 	fmt.Println("Websocket Endpoint Hit")
 	conn, err := websocket.Upgrade(w, r)
 	if err != nil {
@@ -15,6 +15,7 @@ func servWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request) {
 	}
 
 	client := &websocket.Client{
+		ID:   user,
 		Conn: conn,
 		Pool: pool,
 	}
@@ -28,7 +29,9 @@ func setupRoutes() {
 
 	go pool.Start()
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		servWs(pool, w, r)
+		fmt.Println("REQUEST INFO: ", r.URL.Query()["username"][0])
+		name := r.URL.Query()["username"][0]
+		servWs(pool, w, r, name)
 	})
 }
 
