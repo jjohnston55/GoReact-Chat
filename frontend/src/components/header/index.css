@@ -1,0 +1,8 @@
+.header {
+    background-color: #0e4bad;
+    padding: 20px;
+}
+
+.header > h1 {
+    color: #fff2f2;
+}
