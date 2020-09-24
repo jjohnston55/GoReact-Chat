@@ -52,7 +52,7 @@ function App() {
 	}
 
 	const typeName = (evt) => {
-		if (evt.keyCode === 13) {
+		if (evt.keyCode === 13 && evt.target.value.trim() != '') {
 			setLoggedIn(true)
 			setUsername(evt.target.value)
 		}
@@ -75,8 +75,10 @@ function App() {
 				</div>
 			}
 			<Header />
-			<History chatHistory={chatHistory} />
-			<ChatInput send={send} />
+			<div className='content'>
+				<History chatHistory={chatHistory} me={username} />
+				<ChatInput send={send} />
+			</div>
 		</>
 	);
 }
