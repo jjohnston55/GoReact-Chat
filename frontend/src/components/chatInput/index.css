@@ -2,5 +2,9 @@ input#userMessage, .chatInput > button {
     margin-left: 30px;
     padding: 10px;
     min-width: 10%;
-    border-radius: 10px;
+    border-radius: 5px;
+}
+
+.chatInput > button {
+    cursor: pointer;
 }

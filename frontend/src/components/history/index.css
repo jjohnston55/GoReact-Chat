@@ -9,7 +9,7 @@ img#avatar {
 .chat {
     padding: 5px;
     display: grid;
-    grid-template-columns: 50px calc(50% - 50px) calc(50% - 50px) 50px;
+    grid-template-columns: 50px calc(75% - 50px) calc(25% - 50px) 50px;
 }
 
 .chat > img {
@@ -25,6 +25,7 @@ img#avatar {
 .user {
     font-size: small;
     padding: 0px 10px;
+    color: #bbbbbb;
 }
 
 .messages {
@@ -33,7 +34,7 @@ img#avatar {
     height: 500px;
     padding: 25px;
     background-color: #ffffff;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .messages::-webkit-scrollbar {
@@ -59,7 +60,7 @@ img#avatar {
 
 .userStatus {
     text-align: center;
-    color: rgba(160, 160, 160, 120);
+    color: #bbbbbb;
     padding-bottom: 10px;
 }
 
@@ -68,7 +69,7 @@ img#avatar {
     margin-left: auto;
     margin-right: 0;
     display: grid;
-    grid-template-columns: 50px calc(50% - 50px) calc(50% - 50px) 50px;
+    grid-template-columns: 50px calc(25% - 50px) calc(75% - 50px) 50px;
 }
 
 .chatMe > img {
