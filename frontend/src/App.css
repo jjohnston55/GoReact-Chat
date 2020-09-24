@@ -1,24 +1,35 @@
 .content {
-  width: 75%;
-  margin: 0 auto;
+	width: 75%;
+	margin: 0 auto;
 }
 
 .modal {
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  border: 5px solid #282c34;
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	border: 5px solid #282c34;
+	background-color: rgb(0,0,0); /* Fallback color */
+	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
-.modal > .modalContent {
-  background-color: #fefefe;
-  margin: 25vh auto; /* 15% from the top and centered */
-  padding: 20px;
-  border: 1px solid #888;
-  box-shadow: 1px 1px 10px #000000;
-  width: 30%;
+
+.modalContent {
+	background-color: #fefefe;
+	margin: 25vh auto; /* 15% from the top and centered */
+	padding: 20px;
+	border: 1px solid #888;
+	box-shadow: 1px 1px 10px #000000;
+	width: 30%;
+}
+
+.modalContent > label {
+	margin-right: 5px;
+}
+
+input#name, .modalContent > button {
+	margin-right: 20px;
+	padding: 10px;
+	border-radius: 5px;
 }

@@ -3,8 +3,10 @@ import Message from './message'
 import './index.css'
 
 const History = (props) => {
+    const me = props.me
+
     const messages = props.chatHistory.map((msg, idx) => (
-        <Message key={idx} message={msg.data} />
+        <Message key={idx} message={msg.data} me={me} />
     ))
 
     return (

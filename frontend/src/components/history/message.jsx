@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 const Message = (props) => {
     const message = JSON.parse(props.message)
+    const me = props.me
     
     const hashCode = s => Math.abs(s.split('').reduce((a,b) => (((a << 5) - a) + b.charCodeAt(0))|0, 0)) % 25
 
@@ -15,15 +16,27 @@ const Message = (props) => {
             )
         case 1: // Message
         default:
-            return (
-                <div className='chat'>
-                    <img id='avatar' alt='avatar' src={imgSrc} />
-                    <div className='chatText'>
-                        <div className='message'>{message.body}</div>
-                        <div className='user'>{message.user}</div>
+            if (message.user == me) {
+                return (
+                    <div className='chatMe'>
+                        <div className='chatTextMe'>
+                            <div className='message'>{message.body}</div>
+                            <div className='user'>(you)</div>
+                        </div>
+                        <img id='avatar' alt='avatar' src={imgSrc} />
                     </div>
-                </div>
-            )
+                )
+            } else {
+                return (
+                    <div className='chat'>
+                        <img id='avatar' alt='avatar' src={imgSrc} />
+                        <div className='chatText'>
+                            <div className='message'>{message.body}</div>
+                            <div className='user'>{message.user}</div>
+                        </div>
+                    </div>
+                )
+            }
     }
 }
 

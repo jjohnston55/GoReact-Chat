@@ -1,8 +1,19 @@
 .header {
-    background-color: #0e4bad;
+    background-color: #20232a;
     padding: 20px;
+    display: grid;
+    grid-template-columns: 325px 80px 120px auto;
 }
 
 .header > h1 {
-    color: #fff2f2;
+    color: #01AFD0;
+    grid-column: 1 / span 1;
+}
+
+img#golang {
+    grid-column: 2 / span 1;
+}
+
+img#react {
+    grid-column: 3 / span 1;
 }

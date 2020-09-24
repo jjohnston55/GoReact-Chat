@@ -59,8 +59,10 @@ function App() {
 	}
 
 	const logIn = () => {
-		setLoggedIn(true)
-		setUsername(document.getElementById('name').value)
+		if (document.getElementById('name').value.trim() != '') {
+			setLoggedIn(true)
+			setUsername(document.getElementById('name').value)
+		}
 	}
 
 	return (
@@ -68,8 +70,8 @@ function App() {
 			{ !loggedIn &&
 				<div className='modal'>
 					<div className='modalContent'>
-						<label htmlFor='name'>Enter Name</label>
-						<input id='name' type='text' onKeyDown={typeName} />
+						<label htmlFor='name'>Your Name Is:</label>
+						<input id='name' type='text' onKeyDown={typeName} placeholder='Enter name here...' />
 						<button onClick={logIn} type='button'>Log In</button>
 					</div>
 				</div>
