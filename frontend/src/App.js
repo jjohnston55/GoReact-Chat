@@ -18,7 +18,7 @@ function App() {
 	}, [])
 
 	useEffect(() => {
-		if (Object.keys(message).length != 0) {
+		if (Object.keys(message).length !== 0) {
 			setChatHistory([...chatHistory, message])
 			console.log([...chatHistory, message])
 		}
