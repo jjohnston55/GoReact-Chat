@@ -4,7 +4,7 @@ const Message = (props) => {
     const message = JSON.parse(props.message)
     const me = props.me
     
-    const hashCode = s => Math.abs(s.split('').reduce((a,b) => (((a << 5) - a) + b.charCodeAt(0))|0, 0)) % 25
+    const hashCode = s => Math.abs(s.split('').reduce((a,b) => (((a << 5) - a) + b.charCodeAt(0))|0, 0)) % 24 + 1
 
     const [imgSrc, ] = useState('/img/profile_' + hashCode(message.user) + '.jpg')
 
