@@ -10,16 +10,9 @@ const ChatInput = (props) => {
         }
     }
 
-    const submit = () => {
-        if (document.getElementById('userMessage').value.trim() != '') {
-            send(document.getElementById('userMessage').value)
-        }
-    }
-
     return (
         <div className='chatInput'>
             <input id='userMessage' onKeyDown={keyDown} type='text' placeholder='Enter message here...' />
-            <button type='button' onClick={submit}>Send Message</button>
         </div>
     )
 }

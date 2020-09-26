@@ -1,6 +1,7 @@
 package websocket
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 
@@ -8,7 +9,8 @@ import (
 )
 
 type Client struct {
-	ID   string
+	ID   string `json:"id"`
+	Name string `json:"name"`
 	Conn *websocket.Conn
 	Pool *Pool
 }
@@ -17,6 +19,7 @@ type Message struct {
 	Type int    `json:"type"`
 	Body string `json:"body"`
 	User string `json:"user"`
+	Pool string `json:"pool"`
 }
 
 func (c *Client) Read() {
@@ -31,7 +34,8 @@ func (c *Client) Read() {
 			log.Println(err)
 			return
 		}
-		message := Message{Type: messageType, Body: string(p), User: c.ID}
+		user, _ := json.Marshal(&Client{ID: c.ID, Name: c.Name})
+		message := Message{Type: messageType, Body: string(p), User: string(user), Pool: c.Pool.ID}
 		c.Pool.Broadcast <- message
 		fmt.Printf("Message Received: %+v\n", message)
 	}

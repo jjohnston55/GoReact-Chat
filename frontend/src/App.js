@@ -11,11 +11,13 @@ function App() {
 	const [chatHistory, setChatHistory] = useState([])
 	const [loggedIn, setLoggedIn] = useState(false)
 	const [username, setUsername] = useState('')
+	const [key, setKey] = useState('')
+	const [room, setRoom] = useState('')
 	let socket = useRef()
 
 	useEffect(() => {
 		if (loggedIn) {
-			socket.current = new WebSocket("ws://localhost:8080/ws?username=" + username)
+			socket.current = new WebSocket("ws://localhost:8080/ws?username=" + username + "&room=" + room)
 			console.log("Attempting Connection...")
 			
 			socket.current.onopen = () => {
@@ -23,6 +25,7 @@ function App() {
 			}
 		
 			socket.current.onmessage = (msg) => {
+				console.log(msg)
 				setMessage(msg)
 			}
 			
@@ -40,6 +43,9 @@ function App() {
 	useEffect(() => {
 		if (Object.keys(message).length !== 0) {
 			setChatHistory([...chatHistory, message])
+			if (chatHistory.length === 0) {
+				setKey(JSON.parse(JSON.parse(message.data).user).id)
+			}
 		}
 	}, [message])
 
@@ -54,13 +60,21 @@ function App() {
 	const typeName = (evt) => {
 		if (evt.keyCode === 13 && evt.target.value.trim() != '') {
 			setLoggedIn(true)
+			if (testRoomCode()) {
+				setRoom(document.getElementById('room').value.toUpperCase())
+			}
 			setUsername(evt.target.value)
 		}
 	}
 
+	const testRoomCode = () => RegExp(/([A-Z][A-Z][0-9][0-9][0-9])/g).test(document.getElementById('room').value.toUpperCase())
+
 	const logIn = () => {
 		if (document.getElementById('name').value.trim() != '') {
 			setLoggedIn(true)
+			if (testRoomCode()) {
+				setRoom(document.getElementById('room').value.toUpperCase())
+			}
 			setUsername(document.getElementById('name').value)
 		}
 	}
@@ -70,15 +84,24 @@ function App() {
 			{ !loggedIn &&
 				<div className='modal'>
 					<div className='modalContent'>
-						<label htmlFor='name'>Your Name Is:</label>
-						<input id='name' type='text' onKeyDown={typeName} placeholder='Enter name here...' />
-						<button onClick={logIn} type='button'>Log In</button>
+						<div>
+							<label htmlFor='room'>Enter Room Code:</label>
+							<input id='room' type='text' placeholder='Leave blank to join random room' />
+							<div className='toolTip'>format
+								<span className='toolTipText'>Room Code: 'AA000'</span>
+							</div>
+						</div>
+						<div>
+							<label htmlFor='name'>Your Name Is:</label>
+							<input id='name' type='text' onKeyDown={typeName} placeholder='Enter name here...' />
+							<button onClick={logIn} type='button'>Log In</button>
+						</div>
 					</div>
 				</div>
 			}
 			<Header />
 			<div className='content'>
-				<History chatHistory={chatHistory} me={username} />
+				<History chatHistory={chatHistory} me={key} />
 				<ChatInput send={send} />
 			</div>
 		</>

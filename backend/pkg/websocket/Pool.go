@@ -1,16 +1,31 @@
 package websocket
 
-import "fmt"
+import (
+	"encoding/json"
+	"fmt"
+)
+
+type Rooms struct {
+	Pools map[string]*Pool
+}
+
+func InitRooms() *Rooms {
+	return &Rooms{
+		Pools: make(map[string]*Pool),
+	}
+}
 
 type Pool struct {
+	ID         string
 	Register   chan *Client
 	Unregister chan *Client
 	Clients    map[*Client]bool
 	Broadcast  chan Message
 }
 
-func NewPool() *Pool {
+func NewPool(id string) *Pool {
 	return &Pool{
+		ID:         id,
 		Register:   make(chan *Client),
 		Unregister: make(chan *Client),
 		Clients:    make(map[*Client]bool),
@@ -25,14 +40,21 @@ func (pool *Pool) Start() {
 			pool.Clients[client] = true
 			fmt.Println("Size of Connection Pool: ", len(pool.Clients))
 			for c := range pool.Clients {
-				c.Conn.WriteJSON(Message{Type: 2, Body: fmt.Sprint(client.ID, " has Joined..."), User: client.ID})
+				user, _ := json.Marshal(&Client{ID: c.ID, Name: c.Name})
+				c.Conn.WriteJSON(Message{Type: 2, Body: fmt.Sprint(client.Name, " has Joined..."), User: string(user), Pool: pool.ID})
 			}
 			break
 		case client := <-pool.Unregister:
 			delete(pool.Clients, client)
 			fmt.Println("Size of Connection Pool: ", len(pool.Clients))
-			for c := range pool.Clients {
-				c.Conn.WriteJSON(Message{Type: 3, Body: fmt.Sprint(client.ID, " has Disconnected..."), User: client.ID})
+			if len(pool.Clients) == 0 {
+				fmt.Println("NO ONE LEFT IN ROOM")
+				// delete(Rooms, pool)
+			} else {
+				for c := range pool.Clients {
+					user, _ := json.Marshal(&Client{ID: c.ID, Name: c.Name})
+					c.Conn.WriteJSON(Message{Type: 3, Body: fmt.Sprint(client.Name, " has Disconnected..."), User: string(user), Pool: pool.ID})
+				}
 			}
 			break
 		case message := <-pool.Broadcast:
