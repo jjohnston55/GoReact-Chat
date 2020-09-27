@@ -17,7 +17,7 @@ const Message = (props) => {
             )
         case 1: // Message
         default:
-            if (user.id == me) {
+            if (user.id === me) {
                 return (
                     <div className='chatMe'>
                         <div className='chatTextMe'>

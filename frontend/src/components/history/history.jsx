@@ -12,7 +12,7 @@ const History = (props) => {
 
     return (
         <div className='chatHistory'>
-            <h1>Chat History {chatHistory.length > 0 ? '- Room Code: ' + JSON.parse(chatHistory[0].data).pool : ''}</h1>
+            <h1>Chat History {chatHistory.length > 0 ? '- Room Code: ' + JSON.parse(chatHistory[0].data).room : ''}</h1>
             <div className='messages'>
                 {messages}
             </div>

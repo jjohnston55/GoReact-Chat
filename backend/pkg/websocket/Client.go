@@ -12,19 +12,19 @@ type Client struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
 	Conn *websocket.Conn
-	Pool *Pool
+	Room *Room
 }
 
 type Message struct {
 	Type int    `json:"type"`
 	Body string `json:"body"`
 	User string `json:"user"`
-	Pool string `json:"pool"`
+	Room string `json:"room"`
 }
 
 func (c *Client) Read() {
 	defer func() {
-		c.Pool.Unregister <- c
+		c.Room.Unregister <- c
 		c.Conn.Close()
 	}()
 
@@ -35,8 +35,8 @@ func (c *Client) Read() {
 			return
 		}
 		user, _ := json.Marshal(&Client{ID: c.ID, Name: c.Name})
-		message := Message{Type: messageType, Body: string(p), User: string(user), Pool: c.Pool.ID}
-		c.Pool.Broadcast <- message
+		message := Message{Type: messageType, Body: string(p), User: string(user), Room: c.Room.ID}
+		c.Room.Broadcast <- message
 		fmt.Printf("Message Received: %+v\n", message)
 	}
 }

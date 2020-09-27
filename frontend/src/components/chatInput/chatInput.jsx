@@ -5,7 +5,7 @@ const ChatInput = (props) => {
     const { send } = props
 
     const keyDown = (evt) => {
-        if (evt.target.value.trim() != '') {
+        if (evt.target.value.trim() !== '') {
             send(evt)
         }
     }

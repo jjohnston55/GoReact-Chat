@@ -58,7 +58,7 @@ function App() {
 	}
 
 	const typeName = (evt) => {
-		if (evt.keyCode === 13 && evt.target.value.trim() != '') {
+		if (evt.keyCode === 13 && evt.target.value.trim() !== '') {
 			setLoggedIn(true)
 			if (testRoomCode()) {
 				setRoom(document.getElementById('room').value.toUpperCase())
@@ -70,7 +70,7 @@ function App() {
 	const testRoomCode = () => RegExp(/([A-Z][A-Z][0-9][0-9][0-9])/g).test(document.getElementById('room').value.toUpperCase())
 
 	const logIn = () => {
-		if (document.getElementById('name').value.trim() != '') {
+		if (document.getElementById('name').value.trim() !== '') {
 			setLoggedIn(true)
 			if (testRoomCode()) {
 				setRoom(document.getElementById('room').value.toUpperCase())

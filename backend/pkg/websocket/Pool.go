@@ -5,17 +5,17 @@ import (
 	"fmt"
 )
 
-type Rooms struct {
-	Pools map[string]*Pool
+type Pool struct {
+	Rooms map[string]*Room
 }
 
-func InitRooms() *Rooms {
-	return &Rooms{
-		Pools: make(map[string]*Pool),
+func InitPools() *Pool {
+	return &Pool{
+		Rooms: make(map[string]*Room),
 	}
 }
 
-type Pool struct {
+type Room struct {
 	ID         string
 	Register   chan *Client
 	Unregister chan *Client
@@ -23,8 +23,8 @@ type Pool struct {
 	Broadcast  chan Message
 }
 
-func NewPool(id string) *Pool {
-	return &Pool{
+func NewRoom(id string) *Room {
+	return &Room{
 		ID:         id,
 		Register:   make(chan *Client),
 		Unregister: make(chan *Client),
@@ -33,33 +33,33 @@ func NewPool(id string) *Pool {
 	}
 }
 
-func (pool *Pool) Start() {
+func (room *Room) Start() {
 	for {
 		select {
-		case client := <-pool.Register:
-			pool.Clients[client] = true
-			fmt.Println("Size of Connection Pool: ", len(pool.Clients))
-			for c := range pool.Clients {
+		case client := <-room.Register:
+			room.Clients[client] = true
+			fmt.Println("Size of Connection Room: ", len(room.Clients))
+			for c := range room.Clients {
 				user, _ := json.Marshal(&Client{ID: c.ID, Name: c.Name})
-				c.Conn.WriteJSON(Message{Type: 2, Body: fmt.Sprint(client.Name, " has Joined..."), User: string(user), Pool: pool.ID})
+				c.Conn.WriteJSON(Message{Type: 2, Body: fmt.Sprint(client.Name, " has Joined..."), User: string(user), Room: room.ID})
 			}
 			break
-		case client := <-pool.Unregister:
-			delete(pool.Clients, client)
-			fmt.Println("Size of Connection Pool: ", len(pool.Clients))
-			if len(pool.Clients) == 0 {
-				fmt.Println("NO ONE LEFT IN ROOM")
-				// delete(Rooms, pool)
+		case client := <-room.Unregister:
+			delete(room.Clients, client)
+			fmt.Println("Size of Connection Room: ", len(room.Clients))
+			if len(room.Clients) == 0 {
+				fmt.Println("NO ONE LEFT IN POOL")
+				// delete(Room, room)
 			} else {
-				for c := range pool.Clients {
+				for c := range room.Clients {
 					user, _ := json.Marshal(&Client{ID: c.ID, Name: c.Name})
-					c.Conn.WriteJSON(Message{Type: 3, Body: fmt.Sprint(client.Name, " has Disconnected..."), User: string(user), Pool: pool.ID})
+					c.Conn.WriteJSON(Message{Type: 3, Body: fmt.Sprint(client.Name, " has Disconnected..."), User: string(user), Room: room.ID})
 				}
 			}
 			break
-		case message := <-pool.Broadcast:
-			fmt.Println("Sending message to all clients in Pool")
-			for c := range pool.Clients {
+		case message := <-room.Broadcast:
+			fmt.Println("Sending message to all clients in room")
+			for c := range room.Clients {
 				if err := c.Conn.WriteJSON(message); err != nil {
 					fmt.Println(err)
 					return

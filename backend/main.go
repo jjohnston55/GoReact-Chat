@@ -10,7 +10,7 @@ import (
 	"./pkg/websocket"
 )
 
-func servWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request, user string, key string) {
+func servWs(room *websocket.Room, w http.ResponseWriter, r *http.Request, user string, key string) {
 	fmt.Println("Websocket Endpoint Hit")
 	conn, err := websocket.Upgrade(w, r)
 	if err != nil {
@@ -21,10 +21,10 @@ func servWs(pool *websocket.Pool, w http.ResponseWriter, r *http.Request, user s
 		ID:   key,
 		Name: user,
 		Conn: conn,
-		Pool: pool,
+		Room: room,
 	}
 
-	pool.Register <- client
+	room.Register <- client
 	client.Read()
 }
 
@@ -44,10 +44,10 @@ func generateID() string {
 }
 
 func setupRoutes() {
-	rooms := websocket.InitRooms()
-	initialPool := websocket.NewPool(generateID())
-	rooms.Pools[initialPool.ID] = initialPool
-	go initialPool.Start()
+	pools := websocket.InitPools()
+	initialRoom := websocket.NewRoom(generateID())
+	pools.Rooms[initialRoom.ID] = initialRoom
+	go initialRoom.Start()
 
 	rand.Seed(time.Now().UnixNano())
 
@@ -56,20 +56,21 @@ func setupRoutes() {
 		name := r.URL.Query()["username"][0]
 		room := r.URL.Query()["room"][0]
 		if room == "" {
-			// randomPool
-			for id := range rooms.Pools {
-				n := rand.Intn(len(rooms.Pools))
+			// randomRoom
+			for id := range pools.Rooms {
+				n := rand.Intn(6)
+				// pools.Rooms[]
 				fmt.Println("IDS: ", id, "RANDOM", n)
 			}
-			servWs(initialPool, w, r, name, key)
+			servWs(initialRoom, w, r, name, key)
 		} else {
-			if p, ok := rooms.Pools[room]; ok {
+			if p, ok := pools.Rooms[room]; ok {
 				servWs(p, w, r, name, key)
 			} else {
-				pool := websocket.NewPool(room)
-				go pool.Start()
-				rooms.Pools[pool.ID] = pool
-				servWs(pool, w, r, name, key)
+				room := websocket.NewRoom(room)
+				go room.Start()
+				pools.Rooms[room.ID] = room
+				servWs(room, w, r, name, key)
 			}
 		}
 	})
