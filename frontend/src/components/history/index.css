@@ -22,6 +22,10 @@ img#avatar {
     margin-left: 10px;
 }
 
+.chatText > .message {
+    border-radius: 10px 10px 10px 0px;
+}
+
 .user {
     font-size: small;
     padding: 0px 10px;
@@ -53,7 +57,6 @@ img#avatar {
 .message {
     width: fit-content;
     background: white;
-    border-radius: 10px;
     padding: 5px 15px;
     box-shadow: 1px 1px 5px grey;
 }
@@ -87,6 +90,7 @@ img#avatar {
 
 .chatTextMe > .message {
     float: right;
+    border-radius: 10px 10px 0px 10px;
 }
 
 .chatMe .user {

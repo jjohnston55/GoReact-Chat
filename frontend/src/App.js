@@ -93,7 +93,7 @@ function App() {
 						</div>
 						<div>
 							<label htmlFor='name'>Your Name Is:</label>
-							<input id='name' type='text' onKeyDown={typeName} placeholder='Enter name here...' />
+							<input id='name' type='text' maxLength='20' onKeyDown={typeName} placeholder='Enter name here...' />
 							<button onClick={logIn} type='button'>Log In</button>
 						</div>
 					</div>
