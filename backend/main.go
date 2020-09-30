@@ -56,13 +56,13 @@ func setupRoutes() {
 		name := r.URL.Query()["username"][0]
 		room := r.URL.Query()["room"][0]
 		if room == "" {
-			// randomRoom
+			rooms := []string{}
 			for id := range pools.Rooms {
-				n := rand.Intn(6)
-				// pools.Rooms[]
-				fmt.Println("IDS: ", id, "RANDOM", n)
+				rooms = append(rooms, id)
 			}
-			servWs(initialRoom, w, r, name, key)
+			fmt.Println(rooms, rooms[0])
+			randomRoom := pools.Rooms[rooms[rand.Intn(len(rooms))]]
+			servWs(randomRoom, w, r, name, key)
 		} else {
 			if p, ok := pools.Rooms[room]; ok {
 				servWs(p, w, r, name, key)
