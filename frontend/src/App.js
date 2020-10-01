@@ -25,7 +25,6 @@ function App() {
 			}
 		
 			socket.current.onmessage = (msg) => {
-				console.log(msg)
 				setMessage(msg)
 			}
 			
