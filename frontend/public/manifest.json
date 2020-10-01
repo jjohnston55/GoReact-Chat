@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "GoReact",
+  "name": "GoReact Chatroom",
   "icons": [
     {
       "src": "favicon.ico",

@@ -7,7 +7,7 @@ const Message = (props) => {
     
     const hashCode = s => Math.abs(s.split('').reduce((a,b) => (((a << 5) - a) + b.charCodeAt(0))|0, 0)) % 24 + 1
 
-    const [imgSrc, ] = useState('/img/profile_' + hashCode(user.id) + '.jpg')
+    const [imgSrc, ] = useState('./img/profile_' + hashCode(user.id) + '.jpg')
 
     switch (message.type) {
         case 2: // User Joined
