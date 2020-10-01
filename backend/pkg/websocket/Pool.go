@@ -33,7 +33,12 @@ func NewRoom(id string) *Room {
 	}
 }
 
-func (room *Room) Start() {
+func (room *Room) Start(pool *Pool) {
+	defer func() {
+		fmt.Println("Closing Room")
+		delete(pool.Rooms, room.ID)
+	}()
+
 	for {
 		select {
 		case client := <-room.Register:
@@ -48,8 +53,8 @@ func (room *Room) Start() {
 			delete(room.Clients, client)
 			fmt.Println("Size of Connection Room: ", len(room.Clients))
 			if len(room.Clients) == 0 {
-				fmt.Println("NO ONE LEFT IN POOL")
-				// delete(Room, room)
+				fmt.Println("No one left in room")
+				return
 			} else {
 				for c := range room.Clients {
 					user, _ := json.Marshal(&Client{ID: c.ID, Name: c.Name})

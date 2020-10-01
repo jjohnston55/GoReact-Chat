@@ -47,7 +47,7 @@ func setupRoutes() {
 	pools := websocket.InitPools()
 	initialRoom := websocket.NewRoom(generateID())
 	pools.Rooms[initialRoom.ID] = initialRoom
-	go initialRoom.Start()
+	go initialRoom.Start(pools)
 
 	rand.Seed(time.Now().UnixNano())
 
@@ -56,19 +56,26 @@ func setupRoutes() {
 		name := r.URL.Query()["username"][0]
 		room := r.URL.Query()["room"][0]
 		if room == "" {
-			rooms := []string{}
-			for id := range pools.Rooms {
-				rooms = append(rooms, id)
+			fmt.Println(pools.Rooms)
+			if len(pools.Rooms) == 0 {
+				newRoom := websocket.NewRoom(generateID())
+				pools.Rooms[newRoom.ID] = newRoom
+				go newRoom.Start(pools)
+				servWs(newRoom, w, r, name, key)
+			} else {
+				rooms := []string{}
+				for id := range pools.Rooms {
+					rooms = append(rooms, id)
+				}
+				randomRoom := pools.Rooms[rooms[rand.Intn(len(rooms))]]
+				servWs(randomRoom, w, r, name, key)
 			}
-			fmt.Println(rooms, rooms[0])
-			randomRoom := pools.Rooms[rooms[rand.Intn(len(rooms))]]
-			servWs(randomRoom, w, r, name, key)
 		} else {
 			if p, ok := pools.Rooms[room]; ok {
 				servWs(p, w, r, name, key)
 			} else {
 				room := websocket.NewRoom(room)
-				go room.Start()
+				go room.Start(pools)
 				pools.Rooms[room.ID] = room
 				servWs(room, w, r, name, key)
 			}
@@ -77,7 +84,7 @@ func setupRoutes() {
 }
 
 func main() {
-	fmt.Println("GoReact - Chat Application")
+	fmt.Println("GoReact - Chatroom")
 	setupRoutes()
 	http.ListenAndServe(":8080", nil)
 }
