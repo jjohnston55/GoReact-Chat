@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"./pkg/websocket"
+	"github.com/jjohnston55/GoReact-Chatroom/backend/pkg/websocket"
 )
 
 func servWs(room *websocket.Room, w http.ResponseWriter, r *http.Request, user string, key string) {
